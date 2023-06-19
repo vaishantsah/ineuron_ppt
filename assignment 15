@@ -33,4 +33,24 @@ print(result)  # Output: [3, 4, 4, -1]
 
 The time complexity of this solution is O(N), where N is the size of the input array.
 
-2.
+2. Given an array a of integers of length n, find the nearest smaller number for every element such that the smaller element is on the left side.If no small element is present on the left print -1.
+def findNearestSmaller(n, a):
+    stack = []
+    result = []
+
+    for num in a:
+        while stack and stack[-1] >= num:
+            stack.pop()
+
+        if not stack:
+            result.append(-1)
+        else:
+            result.append(stack[-1])
+
+        stack.append(num)
+
+    return result
+
+# Example usage:
+print(findNearestSmaller(3, [1, 6, 2]))  # Output: [-1, 1, 1]
+print(findNearestSmaller(6, [1, 5, 0, 3, 4, 5]))  # Output: [-1, 1, -1, 0, 3, 4]
