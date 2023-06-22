@@ -33,7 +33,10 @@ print(result)  # Output: [3, 4, 4, -1]
 
 The time complexity of this solution is O(N), where N is the size of the input array.
 
-2. Given an array a of integers of length n, find the nearest smaller number for every element such that the smaller element is on the left side.If no small element is present on the left print -1.
+
+
+2. Question 2
+Given an array, a of integers of length n, find the nearest smaller number for every element such that the smaller element is on the left side.If no small element is present on the left print -1.
 def findNearestSmaller(n, a):
     stack = []
     result = []
@@ -54,3 +57,209 @@ def findNearestSmaller(n, a):
 # Example usage:
 print(findNearestSmaller(3, [1, 6, 2]))  # Output: [-1, 1, 1]
 print(findNearestSmaller(6, [1, 5, 0, 3, 4, 5]))  # Output: [-1, 1, -1, 0, 3, 4]
+
+
+
+3. Question 3
+Implement a Stack using two queues q1 and q2.
+from collections import deque
+
+class Stack:
+    def __init__(self):
+        self.q1 = deque()
+        self.q2 = deque()
+
+    def push(self, element):
+        self.q1.append(element)
+
+    def pop(self):
+        if not self.q1 and not self.q2:
+            return -1
+
+        while len(self.q1) > 1:
+            self.q2.append(self.q1.popleft())
+
+        return self.q1.popleft() if self.q1 else self.q2.popleft()
+
+    def top(self):
+        if not self.q1 and not self.q2:
+            return -1
+
+        while len(self.q1) > 1:
+            self.q2.append(self.q1.popleft())
+
+        top_element = self.q1[0] if self.q1 else self.q2[0]
+        self.q2.append(self.q1.popleft()) if self.q1 else self.q2.popleft()
+        self.q1, self.q2 = self.q2, self.q1
+
+        return top_element
+
+# Example usage:
+s = Stack()
+s.push(2)
+s.push(3)
+print(s.pop())  # Output: 3
+s.push(4)
+print(s.pop())  # Output: 4
+
+s = Stack()
+s.push(2)
+print(s.pop())  # Output: 2
+print(s.pop())  # Output: -1
+s.push(3)
+print(s.top())  # Output: 3
+
+
+
+4. Question 4
+You are given a stack St. You have to reverse the stack using recursion.
+def reverseStack(St):
+    if len(St) <= 1:
+        return
+
+    element = St.pop()
+    reverseStack(St)
+    insertAtBottom(St, element)
+
+def insertAtBottom(St, item):
+    if len(St) == 0:
+        St.append(item)
+        return
+
+    top = St.pop()
+    insertAtBottom(St, item)
+    St.append(top)
+
+# Example usage:
+St = [3, 2, 1, 7, 6]
+reverseStack(St)
+print(St)  # Output: [6, 7, 1, 2, 3]
+
+St = [4, 3, 9, 6]
+reverseStack(St)
+print(St)  # Output: [6, 9, 3, 4]
+
+
+
+5. Question 5
+You are given a string S, the task is to reverse the string using stack.
+def reverseString(S):
+    stack = []
+    for char in S:
+        stack.append(char)
+    
+    reversed_string = ""
+    while stack:
+        reversed_string += stack.pop()
+
+    return reversed_string
+
+# Example usage:
+S = "GeeksforGeeks"
+reversed_S = reverseString(S)
+print(reversed_S)  # Output: skeeGrofskeeG
+
+
+6. Question 6
+Given string S representing a postfix expression, the task is to evaluate the expression and find the final value. Operators will only include the 
+basic arithmetic operators like *, /, + and -.
+
+def evaluatePostfix(S):
+    stack = []
+
+    for char in S:
+        if char.isdigit():
+            stack.append(int(char))
+        else:
+            operand2 = stack.pop()
+            operand1 = stack.pop()
+
+            if char == '+':
+                result = operand1 + operand2
+            elif char == '-':
+                result = operand1 - operand2
+            elif char == '*':
+                result = operand1 * operand2
+            elif char == '/':
+                result = operand1 / operand2
+
+            stack.append(result)
+
+    return stack.pop()
+
+# Example usage:
+S = "231*+9-"
+result = evaluatePostfix(S)
+print(result)  # Output: -4
+
+S = "123+*8-"
+result = evaluatePostfix(S)
+print(result)  # Output: -3
+
+
+7. Question 7
+Design a stack that supports push, pop, top, and retrieving the minimum element in constant time.
+
+Implement the `MinStack` class:
+- `MinStack()` initializes the stack object.
+- `void push(int val)` pushes the element `val` onto the stack.
+- `void pop()` removes the element on the top of the stack.
+- `int top()` gets the top element of the stack.
+- `int getMin()` retrieves the minimum element in the stack.
+You must implement a solution with `O(1)` time complexity for each function.
+
+class MinStack:
+    def __init__(self):
+        self.stack = []
+        self.min_stack = []
+
+    def push(self, val):
+        self.stack.append(val)
+        if not self.min_stack or val <= self.min_stack[-1]:
+            self.min_stack.append(val)
+
+    def pop(self):
+        if self.stack[-1] == self.min_stack[-1]:
+            self.min_stack.pop()
+        self.stack.pop()
+
+    def top(self):
+        return self.stack[-1]
+
+    def getMin(self):
+        return self.min_stack[-1]
+
+#Example Usage:
+minStack = MinStack()
+minStack.push(-2)
+minStack.push(0)
+minStack.push(-3)
+print(minStack.getMin())  # Output: -3
+minStack.pop()
+print(minStack.top())     # Output: 0
+print(minStack.getMin())  # Output: -2
+
+8. Question 8
+Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it can trap after raining.
+
+def trap(height):
+    left = 0
+    right = len(height) - 1
+    left_max = right_max = water = 0
+
+    while left <= right:
+        if height[left] <= height[right]:
+            left_max = max(left_max, height[left])
+            water += left_max - height[left]
+            left += 1
+        else:
+            right_max = max(right_max, height[right])
+            water += right_max - height[right]
+            right -= 1
+
+    return water
+
+# Example usage:
+height = [0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1]
+result = trap(height)
+print(result)  # Output: 6
